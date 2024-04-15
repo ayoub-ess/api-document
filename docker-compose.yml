@@ -22,11 +22,6 @@ services:
   keycloak-doc:
       image: quay.io/keycloak/keycloak:23.0.7
       environment:
-        KC_DB: postgres
-        KC_DB_URL: jdbc:postgresql://db-doc:5432/document
-        KC_DB_USERNAME: user
-        KC_DB_PASSWORD: password
-
         KC_HOSTNAME: localhost
         KC_HOSTNAME_PORT: 8080
         KC_HOSTNAME_STRICT: false
