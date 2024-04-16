@@ -11,6 +11,7 @@ public class Document {
             strategy = jakarta.persistence.GenerationType.IDENTITY
     )
     private Long id;
+    @Column(unique = true)
     private UUID documentUUID;
     private String name;
     private String type;
