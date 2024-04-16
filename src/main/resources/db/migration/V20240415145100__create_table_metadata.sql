@@ -1,5 +1,5 @@
 create table metadata(
-                         id bigint primary key,
-                         key uuid,
+                         id SERIAL primary key,
+                         key varchar(255) NOT NULL,
                          value varchar(255) NOT NULL
 );

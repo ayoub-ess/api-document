@@ -1,41 +1,32 @@
 package fr.norsys.apidocument.document;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "metadata")
 public class MetaData {
     @Id
+    @SequenceGenerator(
+            name = "metadata_id_seq",
+            sequenceName = "metadata_id_seq",
+            allocationSize = 1
+    )
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.SEQUENCE,
+            generator = "metadata_id_seq"
     )
     private Long id;
     String key;
+
     String value;
 
-    public MetaData() {
-    }
-
-    public MetaData(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+    @ManyToOne
+    @JoinColumn(name = "doc_id")
+    private Document document;
 }
