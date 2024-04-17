@@ -1,18 +1,22 @@
-package fr.norsys.apidocument.document;
+package fr.norsys.apidocument.document.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class Document {
     @Id
     @SequenceGenerator(
@@ -29,7 +33,9 @@ public class Document {
     private UUID documentUUID;
     private String name;
     private String type;
-    private Date creationDate;
+    @Column(name = "creation_date",nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "document")
     @Cascade(CascadeType.ALL)

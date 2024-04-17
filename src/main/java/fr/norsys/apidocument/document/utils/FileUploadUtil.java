@@ -1,4 +1,4 @@
-package fr.norsys.apidocument.document;
+package fr.norsys.apidocument.document.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.*;
@@ -26,5 +26,16 @@ public class FileUploadUtil {
         }
 
         return documentUUID;
+    }
+
+    public static void deleteFile(UUID documentUUID) throws IOException {
+        Path uploadPath = Paths.get("Files-Upload");
+        Path filePath = uploadPath.resolve(documentUUID.toString());
+
+        try {
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new IOException("Could not delete file with UUID: " + documentUUID, e);
+        }
     }
 }

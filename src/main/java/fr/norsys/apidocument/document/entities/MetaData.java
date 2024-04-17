@@ -1,15 +1,16 @@
-package fr.norsys.apidocument.document;
+package fr.norsys.apidocument.document.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "metadata")
+@Getter
+@Setter
 public class MetaData {
     @Id
     @SequenceGenerator(
@@ -28,5 +29,6 @@ public class MetaData {
 
     @ManyToOne
     @JoinColumn(name = "doc_id")
+    @JsonIgnore
     private Document document;
 }
