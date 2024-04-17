@@ -1,6 +1,6 @@
 package fr.norsys.apidocument.document.repositories;
 
-import fr.norsys.apidocument.document.entities.Document;
+import fr.norsys.apidocument.document.models.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

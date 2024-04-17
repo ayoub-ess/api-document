@@ -1,8 +1,8 @@
 package fr.norsys.apidocument.document.controllers;
 
 import fr.norsys.apidocument.document.utils.FileDownloadUtil;
-import fr.norsys.apidocument.document.entities.Document;
-import fr.norsys.apidocument.document.entities.MetaData;
+import fr.norsys.apidocument.document.models.Document;
+import fr.norsys.apidocument.document.models.MetaData;
 import fr.norsys.apidocument.document.services.DocumentService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

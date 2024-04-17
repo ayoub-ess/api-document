@@ -1,4 +1,4 @@
-package fr.norsys.apidocument.document.entities;
+package fr.norsys.apidocument.document.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

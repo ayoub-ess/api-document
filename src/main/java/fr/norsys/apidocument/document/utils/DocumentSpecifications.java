@@ -1,7 +1,7 @@
 package fr.norsys.apidocument.document.utils;
 
-import fr.norsys.apidocument.document.entities.Document;
-import fr.norsys.apidocument.document.entities.MetaData;
+import fr.norsys.apidocument.document.models.Document;
+import fr.norsys.apidocument.document.models.MetaData;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

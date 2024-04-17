@@ -1,7 +1,7 @@
 package fr.norsys.apidocument.document.services;
 
-import fr.norsys.apidocument.document.entities.Document;
-import fr.norsys.apidocument.document.entities.MetaData;
+import fr.norsys.apidocument.document.models.Document;
+import fr.norsys.apidocument.document.models.MetaData;
 import fr.norsys.apidocument.document.exceptions.SameHashValueException;
 import fr.norsys.apidocument.document.repositories.DocumentRepository;
 import fr.norsys.apidocument.document.repositories.MetaDataRepository;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

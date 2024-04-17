@@ -1,6 +1,6 @@
 package fr.norsys.apidocument.document.repositories;
 
-import fr.norsys.apidocument.document.entities.MetaData;
+import fr.norsys.apidocument.document.models.MetaData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

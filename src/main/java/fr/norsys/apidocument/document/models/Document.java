@@ -1,4 +1,4 @@
-package fr.norsys.apidocument.document.entities;
+package fr.norsys.apidocument.document.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
