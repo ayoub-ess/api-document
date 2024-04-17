@@ -1,12 +1,15 @@
-package fr.norsys.apidocument.auth.security.models;
+package fr.norsys.apidocument.auth.models;
 
+import fr.norsys.apidocument.document.models.Document;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,4 +36,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Set<UserRole> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Document> documents;
 }

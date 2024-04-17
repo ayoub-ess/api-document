@@ -1,6 +1,6 @@
 package fr.norsys.apidocument.auth.security.service;
 
-import fr.norsys.apidocument.auth.security.models.User;
+import fr.norsys.apidocument.auth.models.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

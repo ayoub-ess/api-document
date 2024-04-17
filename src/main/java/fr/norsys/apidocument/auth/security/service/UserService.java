@@ -1,8 +1,8 @@
 package fr.norsys.apidocument.auth.security.service;
 
 
-import fr.norsys.apidocument.auth.security.models.User;
-import fr.norsys.apidocument.auth.security.models.UserRole;
+import fr.norsys.apidocument.auth.models.User;
+import fr.norsys.apidocument.auth.models.UserRole;
 
 public interface UserService {
     User addNewUser(String username , String password, String email);

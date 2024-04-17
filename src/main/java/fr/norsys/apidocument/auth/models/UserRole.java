@@ -1,4 +1,4 @@
-package fr.norsys.apidocument.auth.security.models;
+package fr.norsys.apidocument.auth.models;
 
 public enum UserRole {
     USER("User"),

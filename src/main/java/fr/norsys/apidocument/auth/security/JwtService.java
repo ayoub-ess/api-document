@@ -1,8 +1,8 @@
 package fr.norsys.apidocument.auth.security;
 
 
-import fr.norsys.apidocument.auth.security.models.User;
-import fr.norsys.apidocument.auth.security.models.UserRole;
+import fr.norsys.apidocument.auth.models.User;
+import fr.norsys.apidocument.auth.models.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

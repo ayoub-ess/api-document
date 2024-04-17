@@ -1,5 +1,7 @@
 package fr.norsys.apidocument.document.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.norsys.apidocument.auth.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,5 +42,9 @@ public class Document {
     @OneToMany(mappedBy = "document")
     @Cascade(CascadeType.ALL)
     private List<MetaData> metadata;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

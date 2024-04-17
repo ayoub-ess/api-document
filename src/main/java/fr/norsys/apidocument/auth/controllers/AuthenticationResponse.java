@@ -1,4 +1,4 @@
-package fr.norsys.apidocument.auth.security.controllers;
+package fr.norsys.apidocument.auth.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

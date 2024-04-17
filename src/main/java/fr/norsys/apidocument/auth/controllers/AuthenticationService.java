@@ -1,8 +1,8 @@
-package fr.norsys.apidocument.auth.security.controllers;
+package fr.norsys.apidocument.auth.controllers;
 
 import fr.norsys.apidocument.auth.security.JwtService;
-import fr.norsys.apidocument.auth.security.models.User;
-import fr.norsys.apidocument.auth.security.repositories.UserRepository;
+import fr.norsys.apidocument.auth.models.User;
+import fr.norsys.apidocument.auth.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

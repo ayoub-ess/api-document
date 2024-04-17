@@ -1,8 +1,8 @@
 package fr.norsys.apidocument.auth.security.service;
 
-import fr.norsys.apidocument.auth.security.models.User;
-import fr.norsys.apidocument.auth.security.models.UserRole;
-import fr.norsys.apidocument.auth.security.repositories.UserRepository;
+import fr.norsys.apidocument.auth.models.User;
+import fr.norsys.apidocument.auth.models.UserRole;
+import fr.norsys.apidocument.auth.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

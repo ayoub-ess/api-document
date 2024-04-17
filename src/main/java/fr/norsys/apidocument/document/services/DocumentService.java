@@ -1,5 +1,7 @@
 package fr.norsys.apidocument.document.services;
 
+import fr.norsys.apidocument.auth.repositories.UserRepository;
+import fr.norsys.apidocument.auth.security.AuthService;
 import fr.norsys.apidocument.document.models.Document;
 import fr.norsys.apidocument.document.models.MetaData;
 import fr.norsys.apidocument.document.exceptions.SameHashValueException;
@@ -27,6 +29,8 @@ import java.util.*;
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final MetaDataRepository metaDataRepository;
+    private final AuthService authService;
+    private final UserRepository userRepository;
 
 
     @Transactional
@@ -41,6 +45,7 @@ public class DocumentService {
         Document document = Document.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType().split("/")[1])
+                .user(userRepository.findByEmail(authService.getCurrentUsername()))
                 .documentUUID(documentUUID)
                 .build();
 
@@ -94,6 +99,8 @@ public class DocumentService {
                     metaDataRepository.save(metaData);
                 }
         );
+
+
     }
 
     @Transactional

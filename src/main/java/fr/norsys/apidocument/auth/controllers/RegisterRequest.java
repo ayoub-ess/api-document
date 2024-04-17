@@ -1,6 +1,6 @@
-package fr.norsys.apidocument.auth.security.controllers;
+package fr.norsys.apidocument.auth.controllers;
 
-import fr.norsys.apidocument.auth.security.models.UserRole;
+import fr.norsys.apidocument.auth.models.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

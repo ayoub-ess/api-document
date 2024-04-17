@@ -1,4 +1,4 @@
-package fr.norsys.apidocument.auth.security.controllers;
+package fr.norsys.apidocument.auth.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
