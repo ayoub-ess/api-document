@@ -1,5 +1,6 @@
 package fr.norsys.apidocument.document.controllers;
 
+import fr.norsys.apidocument.document.models.DocumentSharePermission;
 import fr.norsys.apidocument.document.utils.FileDownloadUtil;
 import fr.norsys.apidocument.document.models.Document;
 import fr.norsys.apidocument.document.models.MetaData;
@@ -91,9 +92,14 @@ public class DocumentController {
 
 
     @GetMapping("/shared")
-    public ResponseEntity<List<Document>> getSharedDocuments() {
-        List<Document> documents = documentService.getSharedDocuments();
+    public ResponseEntity<List<DocumentSharePermission>> getSharedDocuments() {
+        List<DocumentSharePermission> documents = documentService.getSharedDocuments();
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
+    @PutMapping
+    public ResponseEntity updateDocument(@RequestParam UUID documentUUID ,@RequestPart("file") MultipartFile file, @RequestPart("metadata") List<MetaData> metadata) throws Exception {
+        documentService.updateDocument(documentUUID,file,metadata);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
