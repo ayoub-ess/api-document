@@ -96,4 +96,9 @@ public class DocumentController {
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 
+    @PutMapping
+    public ResponseEntity updateDocument(@RequestParam UUID documentUUID ,@RequestPart("file") MultipartFile file, @RequestPart("metadata") List<MetaData> metadata) throws Exception {
+        documentService.updateDocument(documentUUID,file,metadata);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
