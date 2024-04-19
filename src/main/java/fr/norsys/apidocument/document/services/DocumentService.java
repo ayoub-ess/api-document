@@ -144,8 +144,8 @@ public class DocumentService {
     }
 
 
-    public List<Document> getSharedDocuments() {
-        return documentRepository.findSharedDocuments(authService.getCurrentUsername());
+    public List<DocumentSharePermission> getSharedDocuments() {
+        return shareRepository.findSharedDocuments(authService.getCurrentUsername());
     }
 
 
