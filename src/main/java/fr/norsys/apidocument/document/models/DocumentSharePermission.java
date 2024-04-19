@@ -1,6 +1,7 @@
 package fr.norsys.apidocument.document.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.norsys.apidocument.auth.models.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class DocumentSharePermission {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "document_id")
+    @JsonIgnore
     private Document document;
 
     @ManyToOne

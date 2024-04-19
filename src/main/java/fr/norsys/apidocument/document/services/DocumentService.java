@@ -144,11 +144,87 @@ public class DocumentService {
     }
 
 
-    public List<Document> getSharedDocuments() {
-        return documentRepository.findSharedDocuments(authService.getCurrentUsername());
+    public List<DocumentSharePermission> getSharedDocuments() {
+        return shareRepository.findSharedDocuments(authService.getCurrentUsername());
     }
 
 
+    @Transactional
+    public void updateDocument(UUID documentUUID,MultipartFile file, List<MetaData> metadata) throws Exception {
+        if (documentRepository.findByDocumentUUID(documentUUID) == null) {
+            throw new IOException("File not found");
+        }
 
+        if (documentRepository.isUserOwnerOfDocument(documentUUID, authService.getCurrentUsername()) == 1 || shareRepository.isUserHavePermission(authService.getCurrentUsername(), PermissionType.WRITE, documentUUID) == 1) {
+            System.out.println("OW"+documentRepository.isUserOwnerOfDocument(documentUUID, authService.getCurrentUsername()));
+            System.out.println("PR"+shareRepository.isUserHavePermission(authService.getCurrentUsername(), PermissionType.DELETE, documentUUID));
+
+            FileUploadUtil.deleteFile(documentUUID);
+
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            Long size = file.getSize();
+
+            FileUploadUtil.saveFile(fileName, file);
+
+            Document document = Document.builder()
+                    .name(file.getOriginalFilename())
+                    .type(file.getContentType().split("/")[1])
+                    .user(userRepository.findByEmail(authService.getCurrentUsername()))
+                    .documentUUID(documentUUID)
+                    .id(documentRepository.findByDocumentUUID(documentUUID).getId())
+                    .build();
+
+            documentRepository.save(document);
+
+            metaDataRepository.deleteByDocumentId(documentRepository.findByDocumentUUID(documentUUID).getId());
+
+            MetaData sizeMetadata = MetaData.builder()
+                    .key("size")
+                    .value(size.toString())
+                    .document(document)
+                    .build();
+
+            metaDataRepository.save(sizeMetadata);
+
+            // Save the uploaded file to a temporary location
+            Path tempFilePath = Files.createTempFile("uploadedFile", null);
+            file.transferTo(tempFilePath.toFile());
+
+            // Calculate HMAC for the uploaded file
+            byte[] secretKey = "secret".getBytes();
+            String hmacValue = HashCalculator.calculateHmacOfFile(tempFilePath.toFile(), secretKey);
+
+            if (metaDataRepository.existsHashValue(hmacValue)) {
+                throw new SameHashValueException("File already exists");
+            }
+
+            // Save HMAC value as metadata
+            MetaData hmacMetadata = MetaData.builder()
+                    .key("hash")
+                    .value(hmacValue)
+                    .document(document)
+                    .build();
+
+            metaDataRepository.save(hmacMetadata);
+
+            Files.delete(tempFilePath);
+
+            // Save other metadata provided in the list
+            metadata.forEach(
+                    mt -> {
+                        String key = mt.getKey();
+                        String value = mt.getValue();
+
+                        MetaData metaData = MetaData.builder()
+                                .key(key)
+                                .value(value)
+                                .document(document)
+                                .build();
+
+                        metaDataRepository.save(metaData);
+                    }
+            );
+        } else throw new PermissionNotAllowedException("You do not own this document. Please request permission from the owner.");
+    }
 
 }

@@ -30,10 +30,12 @@ public class FileUploadUtil {
 
     public static void deleteFile(UUID documentUUID) throws IOException {
         Path uploadPath = Paths.get("Files-Upload");
-        Path filePath = uploadPath.resolve(documentUUID.toString());
-
+        Path path = Files.list(uploadPath)
+                .filter(p -> p.getFileName().toString().startsWith(documentUUID.toString()))
+                .findFirst()
+                .orElseThrow(() -> new FileNotFoundException("File not found with UUID: " + documentUUID));
         try {
-            Files.deleteIfExists(filePath);
+            Files.deleteIfExists(path);
         } catch (IOException e) {
             throw new IOException("Could not delete file with UUID: " + documentUUID, e);
         }
