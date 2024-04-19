@@ -38,7 +38,7 @@ public class DocumentController {
     @DeleteMapping("/{documentUUID}")
     public ResponseEntity deleteFile(
             @PathVariable("documentUUID") UUID documentUUID)
-            throws IOException {
+            throws Exception {
 
         documentService.deleteDocument(documentUUID);
 
@@ -83,5 +83,17 @@ public class DocumentController {
                 .body(resource);
     }
 
+    @PostMapping("/share")
+    public ResponseEntity<?> shareDocument(@RequestBody ShareRequest shareRequest) {
+        documentService.shareDocument(shareRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping("/shared")
+    public ResponseEntity<List<Document>> getSharedDocuments() {
+        List<Document> documents = documentService.getSharedDocuments();
+        return new ResponseEntity<>(documents, HttpStatus.OK);
+    }
 
 }

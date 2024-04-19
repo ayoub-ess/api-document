@@ -2,11 +2,17 @@ package fr.norsys.apidocument.document.services;
 
 import fr.norsys.apidocument.auth.repositories.UserRepository;
 import fr.norsys.apidocument.auth.security.AuthService;
+import fr.norsys.apidocument.document.controllers.ShareRequest;
+import fr.norsys.apidocument.document.exceptions.PermissionNotAllowedException;
 import fr.norsys.apidocument.document.models.Document;
+import fr.norsys.apidocument.document.models.DocumentSharePermission;
 import fr.norsys.apidocument.document.models.MetaData;
 import fr.norsys.apidocument.document.exceptions.SameHashValueException;
+import fr.norsys.apidocument.document.models.PermissionType;
+import fr.norsys.apidocument.document.repositories.DocShareRepository;
 import fr.norsys.apidocument.document.repositories.DocumentRepository;
 import fr.norsys.apidocument.document.repositories.MetaDataRepository;
+import fr.norsys.apidocument.document.repositories.PermissionRepository;
 import fr.norsys.apidocument.document.utils.DocumentSpecifications;
 import fr.norsys.apidocument.document.utils.FileUploadUtil;
 import fr.norsys.apidocument.document.utils.HashCalculator;
@@ -32,13 +38,13 @@ public class DocumentService {
     private final AuthService authService;
     private final UserRepository userRepository;
 
+    private final DocShareRepository shareRepository;
+    private final PermissionRepository permissionRepository;
 
     @Transactional
     public void saveDocument(MultipartFile file, List<MetaData> metadata) throws IOException, NoSuchAlgorithmException, InvalidKeyException, SameHashValueException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Long size = file.getSize();
-
-
 
         UUID documentUUID = FileUploadUtil.saveFile(fileName, file);
 
@@ -63,7 +69,6 @@ public class DocumentService {
         Path tempFilePath = Files.createTempFile("uploadedFile", null);
         file.transferTo(tempFilePath.toFile());
 
-
         // Calculate HMAC for the uploaded file
         byte[] secretKey = "secret".getBytes();
         String hmacValue = HashCalculator.calculateHmacOfFile(tempFilePath.toFile(), secretKey);
@@ -71,7 +76,6 @@ public class DocumentService {
         if (metaDataRepository.existsHashValue(hmacValue)) {
             throw new SameHashValueException("File already exists");
         }
-
 
         // Save HMAC value as metadata
         MetaData hmacMetadata = MetaData.builder()
@@ -99,14 +103,22 @@ public class DocumentService {
                     metaDataRepository.save(metaData);
                 }
         );
-
-
     }
 
     @Transactional
-    public void deleteDocument(UUID documentUUID) throws IOException {
-        documentRepository.deleteByDocumentUUID(documentUUID);
-        FileUploadUtil.deleteFile(documentUUID);
+    public void deleteDocument(UUID documentUUID) throws Exception {
+        if (documentRepository.findByDocumentUUID(documentUUID) == null) {
+            throw new IOException("File not found");
+        }
+
+        if (documentRepository.isUserOwnerOfDocument(documentUUID, authService.getCurrentUsername()) == 1 || shareRepository.isUserHavePermission(authService.getCurrentUsername(), PermissionType.DELETE, documentUUID) == 1) {
+            System.out.println("OW"+documentRepository.isUserOwnerOfDocument(documentUUID, authService.getCurrentUsername()));
+            System.out.println("PR"+shareRepository.isUserHavePermission(authService.getCurrentUsername(), PermissionType.DELETE, documentUUID));
+            documentRepository.deleteByDocumentUUID(documentUUID);
+            FileUploadUtil.deleteFile(documentUUID);
+        } else throw new PermissionNotAllowedException("You are not the owner of the document");
+
+
     }
 
     public Document getDocument(UUID documentUUID) {
@@ -117,4 +129,26 @@ public class DocumentService {
         Specification<Document> spec = DocumentSpecifications.findByTypeOrNameOrCreationDate(searchName);
         return documentRepository.findAll(spec);
     }
+
+    @Transactional
+    public void shareDocument(ShareRequest shareRequest) {
+        DocumentSharePermission sharePermission = DocumentSharePermission.builder()
+                .document(documentRepository.findByDocumentUUID(shareRequest.getDocumentUUID()))
+                .user(userRepository.findByEmail(shareRequest.getEmail()))
+                .permission(permissionRepository.findByType(shareRequest.getPermission()))
+                .build();
+
+        System.out.println(permissionRepository.findByType(shareRequest.getPermission()));
+
+        shareRepository.save(sharePermission);
+    }
+
+
+    public List<Document> getSharedDocuments() {
+        return documentRepository.findSharedDocuments(authService.getCurrentUsername());
+    }
+
+
+
+
 }
