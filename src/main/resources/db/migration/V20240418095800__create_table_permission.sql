@@ -5,6 +5,7 @@ CREATE TABLE permission (
 
 insert into permission values (1, 'READ');
 insert into permission values (2, 'WRITE');
+insert into permission values (3, 'DELETE');
 
 CREATE TABLE document_share_permission (
                             id BIGSERIAL PRIMARY KEY,

@@ -1,5 +1,6 @@
 package fr.norsys.apidocument.document.controllers;
 
+import fr.norsys.apidocument.auth.security.AuthService;
 import fr.norsys.apidocument.document.models.DocumentSharePermission;
 import fr.norsys.apidocument.document.utils.FileDownloadUtil;
 import fr.norsys.apidocument.document.models.Document;
@@ -22,9 +23,11 @@ import java.util.UUID;
 public class DocumentController {
 
     private final DocumentService documentService;
+    private final AuthService authService;
 
-    public DocumentController(DocumentService documentService) {
+    public DocumentController(DocumentService documentService, AuthService authService) {
         this.documentService = documentService;
+        this.authService = authService;
     }
 
     @PostMapping
@@ -55,8 +58,9 @@ public class DocumentController {
 
     @GetMapping
     public ResponseEntity<List<Document>> getDocumentsByCriteria(@RequestParam(defaultValue = "",required = false) String searchName) {
-
-        List<Document> documents = documentService.getDocumentByCriteria(searchName);
+        List<Document> documents = documentService.getDocumentByCriteria(searchName).stream()
+                .filter(document -> document.getUser().getEmail().equals(authService.getCurrentUsername()))
+                .toList();
         return new ResponseEntity<>(documents, HttpStatus.OK);
     }
 

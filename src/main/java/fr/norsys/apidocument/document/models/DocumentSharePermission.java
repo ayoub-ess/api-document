@@ -31,7 +31,6 @@ public class DocumentSharePermission {
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "document_id")
-    @JsonIgnore
     private Document document;
 
     @ManyToOne
